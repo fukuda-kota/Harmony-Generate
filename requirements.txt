@@ -176,3 +176,13 @@ Werkzeug==2.3.6
 widgetsnbextension==4.0.3
 wrapt==1.15.0
 zipp==3.20.2
+streamlit
+spleeter==2.3.0
+librosa
+numpy
+pyworld
+soundfile
+scipy
+pydub
+tensorflow==2.15.1
+audioread==3.0.0

@@ -1,5 +1,7 @@
 import streamlit as st
-from spleeter.separator import Separator 
+from demucs import pretrained
+from demucs.apply import apply_model
+import torchaudio
 import librosa
 import numpy as np
 import pyworld as pw
@@ -18,15 +20,26 @@ def extract_vocals_and_accompaniment(input_file, output_dir):
     # 出力ディレクトリが存在しない場合は作成
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    
-    separator = Separator('spleeter:2stems')
-    separator.separate_to_file(input_file, output_dir, codec='wav')
-    
-    # ボーカルと伴奏のパスを返す
-    vocal_file_path = os.path.join(output_dir, "uploaded_audio", "vocals.wav")
-    accompaniment_file_path = os.path.join(output_dir, "uploaded_audio", "accompaniment.wav")
-    
+
+    # Demucsの事前学習済みモデルをロード
+    model = pretrained.get_model("htdemucs")
+
+    # 入力ファイルをロード
+    waveform, sr = torchaudio.load(input_file)
+
+    # Demucsで分離を実行
+    sources = apply_model(model, waveform, sr=sr, device="cpu")
+
+    # ボーカルと伴奏を保存
+    vocal_file_path = os.path.join(output_dir, "vocals.wav")
+    accompaniment_file_path = os.path.join(output_dir, "accompaniment.wav")
+
+    # sourcesの0番目が伴奏、1番目がボーカル
+    torchaudio.save(vocal_file_path, sources[1], sr)
+    torchaudio.save(accompaniment_file_path, sources[0], sr)
+
     return vocal_file_path, accompaniment_file_path
+
 
 # Streamlitアプリの構成
 st.title("ボーカルと伴奏の抽出")
@@ -45,20 +58,22 @@ if uploaded_file is not None:
             f.write(uploaded_file.getbuffer())
 
         # ボーカルと伴奏を抽出して保存
-        vocal_file_path, accompaniment_file_path = extract_vocals_and_accompaniment("uploaded_audio.wav", output_dir)
+        vocal_file_path, accompaniment_file_path = extract_vocals_and_accompaniment(
+            "uploaded_audio.wav", output_dir
+        )
 
         # 抽出されたボーカルと伴奏のファイルをダウンロードできるリンクを表示
         if os.path.exists(vocal_file_path) and os.path.exists(accompaniment_file_path):
             st.success("ボーカルと伴奏が正常に抽出されました！")
-            
+
             # ボーカルファイルのダウンロードリンク
-            st.audio(vocal_file_path, format='audio/wav')
-            
+            st.audio(vocal_file_path, format="audio/wav")
+
             # 伴奏ファイルのダウンロードリンク
-            st.audio(accompaniment_file_path, format='audio/wav')
-            
+            st.audio(accompaniment_file_path, format="audio/wav")
+
         else:
-            st.error("ファイルが見つかりません。")  
+            st.error("ファイルが見つかりません。")
 
 
 # 遷移確率行列
@@ -219,7 +234,6 @@ uploaded_main_melody_file = st.file_uploader("主旋律をアップロードし�
 harmony_volume = st.slider("ハモリの音量を調整", min_value=-30, max_value=30, value=0, key="harmony_volume_slider")
 accompaniment_volume = st.slider("伴奏の音量を調整", min_value=-30, max_value=30, value=0, key="accompaniment_volume_slider")
 main_melody_volume = st.slider("主旋律の音量を調整", min_value=-30, max_value=30, value=0, key="main_melody_volume_slider")
-
 
 
 # 主旋律、伴奏、ハモリを合成する部分

@@ -184,5 +184,4 @@ pyworld
 soundfile
 scipy
 pydub
-tensorflow==2.15.1
 audioread==3.0.0

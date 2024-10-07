@@ -8,3 +8,4 @@ scipy
 pydub
 setuptools>=58.0.0
 wheel
+setuptools-scm

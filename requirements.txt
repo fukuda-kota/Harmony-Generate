@@ -1,16 +1,16 @@
 ffmpeg==1.4
 ffmpeg-python==0.2.0
-streamlit==1.9.0  # バージョンを調整
+streamlit==1.9.0
 spleeter==2.4.0
 librosa==0.8.0
-numpy==1.19.5  # TensorFlow に対応するバージョン
+numpy==1.20.3  # 現行環境に対応したバージョン
 pyworld==0.3.4
 soundfile==0.12.1
-scipy==1.5.4  # TensorFlow と互換性あり
+scipy==1.7.1  # 古いバージョンの scipy を避ける
 pydub==0.25.1
 audioread==2.1.9
 setuptools>=58.0.0
-tensorflow==2.5.0  # numpy==1.19.5 に対応するバージョン
+tensorflow==2.9.0  # numpy 1.20.3 との互換性
 wheel
 click==7.1.2
 typer==0.3.2

@@ -9,4 +9,3 @@ soundfile
 scipy
 pydub
 audioread
-python_version<3.11

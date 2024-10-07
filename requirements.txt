@@ -183,4 +183,5 @@ pyworld
 soundfile
 scipy
 pydub
-audioread==3.0.0
+audioread
+

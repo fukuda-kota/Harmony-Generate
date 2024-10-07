@@ -1,6 +1,5 @@
 import streamlit as st
-from demucs import pretrained
-from demucs.apply import apply_model
+from spleeter.separator import Separator
 import torchaudio
 import librosa
 import numpy as np
@@ -21,22 +20,14 @@ def extract_vocals_and_accompaniment(input_file, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    # Demucsの事前学習済みモデルをロード
-    model = pretrained.get_model("htdemucs")
+    separator = Separator("spleeter:2stems")
+    separator.separate_to_file(input_file, output_dir, codec="wav")
 
-    # 入力ファイルをロード
-    waveform, sr = torchaudio.load(input_file)
-
-    # Demucsで分離を実行
-    sources = apply_model(model, waveform, sr=sr, device="cpu")
-
-    # ボーカルと伴奏を保存
-    vocal_file_path = os.path.join(output_dir, "vocals.wav")
-    accompaniment_file_path = os.path.join(output_dir, "accompaniment.wav")
-
-    # sourcesの0番目が伴奏、1番目がボーカル
-    torchaudio.save(vocal_file_path, sources[1], sr)
-    torchaudio.save(accompaniment_file_path, sources[0], sr)
+    # ボーカルと伴奏のパスを返す
+    vocal_file_path = os.path.join(output_dir, "uploaded_audio", "vocals.wav")
+    accompaniment_file_path = os.path.join(
+        output_dir, "uploaded_audio", "accompaniment.wav"
+    )
 
     return vocal_file_path, accompaniment_file_path
 
@@ -74,7 +65,6 @@ if uploaded_file is not None:
 
         else:
             st.error("ファイルが見つかりません。")
-
 
 # 遷移確率行列
 transition_probabilities_same_pitch = {

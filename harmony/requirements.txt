@@ -7,5 +7,3 @@ soundfile
 scipy
 pydub
 tensorflow==2.15.1
-setuptools>=58.0.0
-wheel

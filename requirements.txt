@@ -9,3 +9,5 @@ soundfile==0.12.1
 scipy==1.11.1
 pydub==0.25.1
 audioread==3.0.0
+setuptools>=58.0.0
+wheel

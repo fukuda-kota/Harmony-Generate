@@ -1,4 +1,6 @@
 [server]
 maxUploadSize = 200
 [global]
-pythonVersion = "3.10"
+[global]
+pythonVersion = "3.9"
+

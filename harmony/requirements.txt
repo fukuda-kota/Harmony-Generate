@@ -1,11 +1,10 @@
 streamlit
 spleeter==2.1.0
 librosa
-numpy==1.18.5
+numpy==1.18.0
 pyworld
 soundfile
 scipy
 pydub
 setuptools>=58.0.0
 wheel
-setuptools-scm

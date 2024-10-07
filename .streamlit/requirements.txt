@@ -1,0 +1,9 @@
+streamlit
+spleeter==2.3.0
+librosa
+numpy
+pyworld
+soundfile
+scipy
+pydub
+tensorflow==2.15.1

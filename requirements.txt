@@ -2,10 +2,10 @@ ffmpeg==1.4
 ffmpeg-python==0.2.0
 streamlit==1.15.2
 spleeter==2.4.0
-librosa
-numpy
-pyworld
-soundfile
-scipy
-pydub
-audioread
+librosa==0.10.0.post2
+numpy==1.24.4
+pyworld==0.3.4
+soundfile==0.12.1
+scipy==1.11.1
+pydub==0.25.1
+audioread==3.0.0

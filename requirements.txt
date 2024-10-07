@@ -177,7 +177,6 @@ widgetsnbextension==4.0.3
 wrapt==1.15.0
 zipp==3.20.2
 streamlit
-spleeter==2.3.0
 librosa
 numpy
 pyworld

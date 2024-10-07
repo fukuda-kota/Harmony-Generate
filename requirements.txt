@@ -1,7 +1,7 @@
 ffmpeg==1.4
 ffmpeg-python==0.2.0
 streamlit
-spleeter
+spleeter==2.4.0
 librosa
 numpy
 pyworld

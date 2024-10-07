@@ -1,7 +1,7 @@
 streamlit
-spleeter
+spleeter==2.1.0
 librosa
-numpy==1.19.3
+numpy==1.18.5
 pyworld
 soundfile
 scipy

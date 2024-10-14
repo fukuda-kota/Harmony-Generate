@@ -34,8 +34,9 @@ if ffmpeg_path:
     # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
-    # Spleeterを初期化してFFmpegのパスを指定
-    separator = Separator("spleeter:2stems", params={"ffmpeg": ffmpeg_path})
+    # Spleeterを初期化（paramsを使用せず）
+    separator = Separator("spleeter:2stems")
+
 
 # ファイル削除用の関数を定義
 def delete_file_after_delay(file_path, delay=300):

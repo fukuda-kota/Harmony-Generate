@@ -14,6 +14,7 @@ import threading
 import time
 from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 
+
 # FFmpegのパスを確認する関数
 def check_ffmpeg_path():
     try:
@@ -34,8 +35,11 @@ if ffmpeg_path:
     # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
-    # Spleeterを初期化してFFmpegのパスを指定
-    separator = Separator("spleeter:2stems", params={"ffmpeg": ffmpeg_path})
+    # Spleeterを初期化（paramsは不要）
+    separator = Separator("spleeter:2stems")
+
+else:
+    st.error("FFmpegが見つかりませんでした。")
 
 
 # ファイル削除用の関数を定義

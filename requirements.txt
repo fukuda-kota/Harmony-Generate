@@ -14,3 +14,4 @@ tensorflow==2.9.0
 wheel
 click==7.1.2
 typer==0.3.2 
+altair==4.2.2

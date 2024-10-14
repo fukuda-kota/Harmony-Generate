@@ -12,7 +12,7 @@ from pydub import AudioSegment
 import os
 import threading
 import time
-
+from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 
 # FFmpegのパスを確認する関数
 def check_ffmpeg_path():
@@ -30,6 +30,8 @@ ffmpeg_path = check_ffmpeg_path()
 
 if ffmpeg_path:
     st.write(f"FFmpeg path: {ffmpeg_path}")
+
+    # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
 
@@ -85,10 +87,6 @@ if uploaded_file is not None:
             temp_file.write(uploaded_file.getbuffer())
             uploaded_file_path = temp_file.name  # 一時ファイルのパスを取得
 
-        st.write(
-            f"アップロードされたファイルが一時ファイルとして保存されました: {uploaded_file_path}"
-        )
-
         # 5分後にアップロードされたファイルを削除するスレッドを開始
         threading.Thread(
             target=delete_file_after_delay, args=(uploaded_file_path, 300)
@@ -99,7 +97,7 @@ if uploaded_file is not None:
             uploaded_file_path, output_dir
         )
 
-        # 抽出されたボーカルと伴奏のファイルも5分後に削除するスレッドを開始
+        # 抽出されたボーカルと伴奏ファイルも5分後に削除するスレッドを開始
         threading.Thread(
             target=delete_file_after_delay, args=(vocal_file_path, 300)
         ).start()

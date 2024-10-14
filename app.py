@@ -42,13 +42,6 @@ if ffmpeg_path:
 
 # ファイル削除用の関数を定義
 def delete_file_after_delay(file_path, delay=300):
-    """
-    指定された時間（秒）後にファイルを削除する。
-
-    Parameters:
-        file_path (str): 削除するファイルのパス
-        delay (int): ファイルを削除するまでの待機時間（秒）
-    """
     time.sleep(delay)
     if os.path.exists(file_path):
         os.remove(file_path)

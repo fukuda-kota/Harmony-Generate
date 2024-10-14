@@ -14,11 +14,7 @@ import threading
 import time
 
 
-# FFmpegバイナリのパスを設定（デフォルトのインストールパスが分かれば指定）
-os.environ["FFMPEG_PATH"] = "/usr/bin/ffmpeg"  # 例: Streamlit Cloud上のパス
-
-
-# FFmpegのパスを確認する
+# FFmpegのパスを確認する関数
 def check_ffmpeg_path():
     try:
         ffmpeg_path = (
@@ -26,12 +22,17 @@ def check_ffmpeg_path():
         )
         return ffmpeg_path
     except subprocess.CalledProcessError:
-        return "FFmpeg is not installed."
+        return None
 
 
-# Streamlitで表示
+# FFmpegのパスを取得
 ffmpeg_path = check_ffmpeg_path()
-st.write("FFmpeg path:", ffmpeg_path)
+
+if ffmpeg_path:
+    st.write(f"FFmpeg path: {ffmpeg_path}")
+
+    # Spleeterを初期化してFFmpegのパスを指定
+    separator = Separator("spleeter:2stems", params={"ffmpeg": ffmpeg_path})
 
 # ファイル削除用の関数を定義
 def delete_file_after_delay(file_path, delay=300):

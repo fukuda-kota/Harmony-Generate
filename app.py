@@ -8,7 +8,6 @@ import pyworld as pw
 import soundfile as sf
 from scipy.ndimage import uniform_filter1d
 from pydub import AudioSegment
-from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 import os
 import threading
 import time
@@ -34,7 +33,7 @@ if ffmpeg_path:
     # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
-    # Spleeterを初期化（paramsを使用せず）
+    # Spleeterを初期化
     separator = Separator("spleeter:2stems")
 
 

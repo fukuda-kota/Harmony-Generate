@@ -7,6 +7,7 @@ import pyworld as pw
 import soundfile as sf
 from scipy.ndimage import uniform_filter1d
 from pydub import AudioSegment
+from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 import os
 import threading
 import time

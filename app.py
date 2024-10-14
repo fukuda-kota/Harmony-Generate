@@ -31,6 +31,9 @@ ffmpeg_path = check_ffmpeg_path()
 if ffmpeg_path:
     st.write(f"FFmpeg path: {ffmpeg_path}")
 
+    # 環境変数にFFmpegのパスを設定
+    os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
+
     # Spleeterを初期化してFFmpegのパスを指定
     separator = Separator("spleeter:2stems", params={"ffmpeg": ffmpeg_path})
 

@@ -16,6 +16,28 @@ import time
 from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 
 
+def check_ffmpeg_path():
+    # Windowsかどうかを確認
+    if os.name == "nt":  # Windowsの場合
+        try:
+            # Windowsでは "where" コマンドを使用
+            ffmpeg_path = (
+                subprocess.check_output(["where", "ffmpeg"]).decode("utf-8").strip()
+            )
+        except subprocess.CalledProcessError:
+            raise FileNotFoundError(
+                "FFmpegがシステムのパスに見つかりません。FFmpegがインストールされ、環境変数に正しく設定されていることを確認してください。"
+            )
+    else:
+        try:
+            # LinuxやmacOSでは "which" コマンドを使用
+            ffmpeg_path = (
+                subprocess.check_output(["which", "ffmpeg"]).decode("utf-8").strip()
+            )
+        except subprocess.CalledProcessError:
+            raise FileNotFoundError("FFmpegが見つかりません。インストールが必要です。")
+    return ffmpeg_path
+
 # FFmpegのパスを確認する関数
 def check_ffmpeg_path():
     try:
@@ -103,7 +125,7 @@ if uploaded_file is not None:
         else:
             st.error("抽出したファイルが見つかりません。")
 
-            
+
 # 遷移確率行列
 transition_probabilities_same_pitch = {
     "major_third": {"major_third": 0.7, "minor_third": 0.15, "perfect_fourth": 0.1, "none": 0.05},

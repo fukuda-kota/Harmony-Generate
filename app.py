@@ -12,8 +12,7 @@ import threading
 import time
 
 
-# FFmpegのパスをエスケープして設定
-os.environ['PATH'] += os.pathsep + "C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin"
+
 
 
 # ファイル削除用の関数を定義

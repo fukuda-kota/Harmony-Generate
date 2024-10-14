@@ -34,6 +34,9 @@ if ffmpeg_path:
     # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
+    # Spleeterを初期化してFFmpegのパスを指定
+    separator = Separator("spleeter:2stems", params={"ffmpeg": ffmpeg_path})
+
 
 # ファイル削除用の関数を定義
 def delete_file_after_delay(file_path, delay=300):
@@ -82,10 +85,10 @@ output_dir = "./output"
 # ボタンが押されたときに処理を実行
 if uploaded_file is not None:
     if st.button("ボーカルと伴奏を抽出"):
-        # 一時ファイルにアップロードされた音声を保存
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
-            temp_file.write(uploaded_file.getbuffer())
-            uploaded_file_path = temp_file.name  # 一時ファイルのパスを取得
+        # アップロードされたファイルを保存
+        uploaded_file_path = "uploaded_audio.wav"
+        with open(uploaded_file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
 
         # 5分後にアップロードされたファイルを削除するスレッドを開始
         threading.Thread(
@@ -116,7 +119,6 @@ if uploaded_file is not None:
             st.audio(accompaniment_file_path, format="audio/wav")
         else:
             st.error("ファイルが見つかりません。")
-
 
 # 遷移確率行列
 transition_probabilities_same_pitch = {

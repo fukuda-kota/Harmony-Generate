@@ -29,7 +29,7 @@ def extract_vocals_and_accompaniment(input_file, output_dir):
         os.makedirs(output_dir)
 
     separator = Separator("spleeter:2stems")
-    audio_adapter = FFMPEGProcessAudioAdapter(ffmpeg_binary="/C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin")  # 実際のパスに置き換える
+    audio_adapter = FFMPEGProcessAudioAdapter(ffmpeg_binary="C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin")  # 実際のパスに置き換える
     separator.separate_to_file(input_file, output_dir, codec="wav", audio_adapter=audio_adapter)
     # ボーカルと伴奏のパスを返す
     vocal_file_path = os.path.join(output_dir, "uploaded_audio", "vocals.wav")

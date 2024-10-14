@@ -16,28 +16,6 @@ import time
 from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 
 
-def check_ffmpeg_path():
-    # Windowsかどうかを確認
-    if os.name == "nt":  # Windowsの場合
-        try:
-            # Windowsでは "where" コマンドを使用
-            ffmpeg_path = (
-                subprocess.check_output(["where", "ffmpeg"]).decode("utf-8").strip()
-            )
-        except subprocess.CalledProcessError:
-            raise FileNotFoundError(
-                "FFmpegがシステムのパスに見つかりません。FFmpegがインストールされ、環境変数に正しく設定されていることを確認してください。"
-            )
-    else:
-        try:
-            # LinuxやmacOSでは "which" コマンドを使用
-            ffmpeg_path = (
-                subprocess.check_output(["which", "ffmpeg"]).decode("utf-8").strip()
-            )
-        except subprocess.CalledProcessError:
-            raise FileNotFoundError("FFmpegが見つかりません。インストールが必要です。")
-    return ffmpeg_path
-
 # FFmpegのパスを確認する関数
 def check_ffmpeg_path():
     try:
@@ -54,13 +32,29 @@ ffmpeg_path = check_ffmpeg_path()
 
 if ffmpeg_path:
     st.write(f"FFmpeg path: {ffmpeg_path}")
+
     # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
-    # Spleeterを初期化
-    separator = Separator("spleeter:2stems")
-else:
-    st.error("FFmpegが見つかりませんでした。")
+    # Spleeterを初期化してFFmpegのパスを指定
+    separator = Separator("spleeter:2stems", params={"ffmpeg": ffmpeg_path})
+
+
+# ファイル削除用の関数を定義
+def delete_file_after_delay(file_path, delay=300):
+    """
+    指定された時間（秒）後にファイルを削除する。
+
+    Parameters:
+        file_path (str): 削除するファイルのパス
+        delay (int): ファイルを削除するまでの待機時間（秒）
+    """
+    time.sleep(delay)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print(f"{file_path} が削除されました。")
+    else:
+        print(f"{file_path} が見つかりません。")
 
 
 # ボーカルと伴奏を抽出する関数
@@ -69,12 +63,8 @@ def extract_vocals_and_accompaniment(input_file, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    try:
-        st.write(f"Separating file: {input_file}")
-        separator.separate_to_file(input_file, output_dir, codec="wav")
-        st.write(f"Separation complete. Files saved to: {output_dir}")
-    except Exception as e:
-        st.error(f"Error during separation: {str(e)}")
+    separator = Separator("spleeter:2stems")
+    separator.separate_to_file(input_file, output_dir, codec="wav")
 
     # ボーカルと伴奏のパスを返す
     vocal_file_path = os.path.join(output_dir, "uploaded_audio", "vocals.wav")
@@ -102,16 +92,23 @@ if uploaded_file is not None:
         with open(uploaded_file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
 
-        # ファイル保存確認
-        if os.path.exists(uploaded_file_path):
-            st.write(f"ファイルが保存されました: {uploaded_file_path}")
-        else:
-            st.error("ファイルの保存に失敗しました。")
+        # 5分後にアップロードされたファイルを削除するスレッドを開始
+        threading.Thread(
+            target=delete_file_after_delay, args=(uploaded_file_path, 300)
+        ).start()
 
         # ボーカルと伴奏を抽出して保存
         vocal_file_path, accompaniment_file_path = extract_vocals_and_accompaniment(
             uploaded_file_path, output_dir
         )
+
+        # 抽出されたボーカルと伴奏ファイルも5分後に削除するスレッドを開始
+        threading.Thread(
+            target=delete_file_after_delay, args=(vocal_file_path, 300)
+        ).start()
+        threading.Thread(
+            target=delete_file_after_delay, args=(accompaniment_file_path, 300)
+        ).start()
 
         # 抽出されたボーカルと伴奏のファイルをダウンロードできるリンクを表示
         if os.path.exists(vocal_file_path) and os.path.exists(accompaniment_file_path):
@@ -123,8 +120,7 @@ if uploaded_file is not None:
             # 伴奏ファイルのダウンロードリンク
             st.audio(accompaniment_file_path, format="audio/wav")
         else:
-            st.error("抽出したファイルが見つかりません。")
-
+            st.error("ファイルが見つかりません。")
 
 # 遷移確率行列
 transition_probabilities_same_pitch = {

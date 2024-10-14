@@ -8,10 +8,29 @@ import soundfile as sf
 from scipy.ndimage import uniform_filter1d
 from pydub import AudioSegment
 import os
+import threading
+import time
 
 
 # FFmpegのパスをエスケープして設定
 os.environ['PATH'] += os.pathsep + "C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin"
+
+
+# ファイル削除用の関数を定義
+def delete_file_after_delay(file_path, delay=300):
+    """
+    指定された時間（秒）後にファイルを削除する。
+
+    Parameters:
+        file_path (str): 削除するファイルのパス
+        delay (int): ファイルを削除するまでの待機時間（秒）
+    """
+    time.sleep(delay)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print(f"{file_path} が削除されました。")
+    else:
+        print(f"{file_path} が見つかりません。")
 
 
 # ボーカルと伴奏を抽出する関数
@@ -45,13 +64,27 @@ output_dir = "./output"
 if uploaded_file is not None:
     if st.button("ボーカルと伴奏を抽出"):
         # アップロードされたファイルを保存
-        with open("uploaded_audio.wav", "wb") as f:
+        uploaded_file_path = "uploaded_audio.wav"
+        with open(uploaded_file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
+
+        # 5分後にアップロードされたファイルを削除するスレッドを開始
+        threading.Thread(
+            target=delete_file_after_delay, args=(uploaded_file_path, 300)
+        ).start()
 
         # ボーカルと伴奏を抽出して保存
         vocal_file_path, accompaniment_file_path = extract_vocals_and_accompaniment(
-            "uploaded_audio.wav", output_dir
+            uploaded_file_path, output_dir
         )
+
+        # 抽出されたボーカルと伴奏ファイルも5分後に削除するスレッドを開始
+        threading.Thread(
+            target=delete_file_after_delay, args=(vocal_file_path, 300)
+        ).start()
+        threading.Thread(
+            target=delete_file_after_delay, args=(accompaniment_file_path, 300)
+        ).start()
 
         # 抽出されたボーカルと伴奏のファイルをダウンロードできるリンクを表示
         if os.path.exists(vocal_file_path) and os.path.exists(accompaniment_file_path):
@@ -62,9 +95,9 @@ if uploaded_file is not None:
 
             # 伴奏ファイルのダウンロードリンク
             st.audio(accompaniment_file_path, format="audio/wav")
-
         else:
             st.error("ファイルが見つかりません。")
+
 
 # 遷移確率行列
 transition_probabilities_same_pitch = {

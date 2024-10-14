@@ -89,6 +89,9 @@ if uploaded_file is not None:
         uploaded_file_path = "uploaded_audio.wav"
         with open(uploaded_file_path, "wb") as f:
             f.write(uploaded_file.getbuffer())
+        
+        # アップロードされたファイルのパスを確認
+        st.write(f"アップロードされたファイルのパス: {uploaded_file_path}")
 
         # 5分後にアップロードされたファイルを削除するスレッドを開始
         threading.Thread(

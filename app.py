@@ -32,13 +32,11 @@ ffmpeg_path = check_ffmpeg_path()
 
 if ffmpeg_path:
     st.write(f"FFmpeg path: {ffmpeg_path}")
-
     # 環境変数にFFmpegのパスを設定
     os.environ["PATH"] += os.pathsep + os.path.dirname(ffmpeg_path)
 
     # Spleeterを初期化
     separator = Separator("spleeter:2stems")
-
 else:
     st.error("FFmpegが見つかりませんでした。")
 
@@ -105,6 +103,7 @@ if uploaded_file is not None:
         else:
             st.error("抽出したファイルが見つかりません。")
 
+            
 # 遷移確率行列
 transition_probabilities_same_pitch = {
     "major_third": {"major_third": 0.7, "minor_third": 0.15, "perfect_fourth": 0.1, "none": 0.05},

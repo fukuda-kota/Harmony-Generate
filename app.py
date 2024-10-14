@@ -2,6 +2,7 @@ import streamlit as st
 from spleeter.separator import Separator
 import torchaudio
 import librosa
+import subprocess
 import numpy as np
 import pyworld as pw
 import soundfile as sf
@@ -16,6 +17,21 @@ import time
 # FFmpegバイナリのパスを設定（デフォルトのインストールパスが分かれば指定）
 os.environ["FFMPEG_PATH"] = "/usr/bin/ffmpeg"  # 例: Streamlit Cloud上のパス
 
+
+# FFmpegのパスを確認する
+def check_ffmpeg_path():
+    try:
+        ffmpeg_path = (
+            subprocess.check_output(["which", "ffmpeg"]).decode("utf-8").strip()
+        )
+        return ffmpeg_path
+    except subprocess.CalledProcessError:
+        return "FFmpeg is not installed."
+
+
+# Streamlitで表示
+ffmpeg_path = check_ffmpeg_path()
+st.write("FFmpeg path:", ffmpeg_path)
 
 # ファイル削除用の関数を定義
 def delete_file_after_delay(file_path, delay=300):

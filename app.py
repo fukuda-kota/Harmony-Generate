@@ -13,8 +13,8 @@ import threading
 import time
 
 
-# FFmpegのパスをエスケープして設定
-os.environ["PATH"] += (os.pathsep + "C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin")
+# FFmpegバイナリのパスを設定（デフォルトのインストールパスが分かれば指定）
+os.environ["FFMPEG_PATH"] = "/usr/bin/ffmpeg"  # 例: Streamlit Cloud上のパス
 
 
 # ファイル削除用の関数を定義

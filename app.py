@@ -36,6 +36,7 @@ if ffmpeg_path:
     # Spleeterを初期化
     separator = Separator("spleeter:2stems")
 
+st.write(f"アップロードされたファイルのパス: {uploaded_file_path}")
 
 # ファイル削除用の関数を定義
 def delete_file_after_delay(file_path, delay=300):
@@ -118,8 +119,7 @@ if uploaded_file is not None:
             st.audio(accompaniment_file_path, format="audio/wav")
         else:
             st.error("ファイルが見つかりません。")
-            
-st.write(f"アップロードされたファイルのパス: {uploaded_file_path}")
+
 
 # 遷移確率行列
 transition_probabilities_same_pitch = {

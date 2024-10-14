@@ -118,7 +118,8 @@ if uploaded_file is not None:
             st.audio(accompaniment_file_path, format="audio/wav")
         else:
             st.error("ファイルが見つかりません。")
-
+            
+st.write(f"アップロードされたファイルのパス: {uploaded_file_path}")
 
 # 遷移確率行列
 transition_probabilities_same_pitch = {

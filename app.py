@@ -16,10 +16,6 @@ import time
 from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 
 
-# FFmpegのパスをエスケープして設定
-os.environ["PATH"] += (
-    os.pathsep + "C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin"
-)
 
 
 # ボーカルと伴奏を抽出する関数

@@ -14,8 +14,10 @@ import os
 import threading
 import time
 from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
+import imageio
 
-
+# FFmpegのパスをエスケープして設定
+os.environ["IMAGEIO_FFMPEG_EXE"] = st.secrets["FFMPEG_PATH"]
 
 
 # ボーカルと伴奏を抽出する関数

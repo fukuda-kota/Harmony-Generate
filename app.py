@@ -28,7 +28,9 @@ def extract_vocals_and_accompaniment(input_file, output_dir):
 
     separator = Separator("spleeter:2stems")
     audio_adapter = FFMPEGProcessAudioAdapter()
-    separator.separate_to_file(input_file, output_dir, codec="wav", audio_adapter=audio_adapter)
+    separator.separate_to_file(
+        input_file, output_dir, codec="wav", audio_adapter=audio_adapter
+    )
     # ボーカルと伴奏のパスを返す
     vocal_file_path = os.path.join(output_dir, "uploaded_audio", "vocals.wav")
     accompaniment_file_path = os.path.join(

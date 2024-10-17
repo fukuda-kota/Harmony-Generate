@@ -17,9 +17,7 @@ from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 import imageio
 
 # FFmpegのパスをエスケープして設定
-os.environ["PATH"] += (
-    os.pathsep + "C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin"
-)
+os.environ["FFMPEG_PATH"] = "/usr/bin/ffmpeg"
 
 
 # ボーカルと伴奏を抽出する関数
@@ -73,7 +71,7 @@ if uploaded_file is not None:
 
         else:
             st.error("ファイルが見つかりません。")
-            
+
 # 遷移確率行列
 transition_probabilities_same_pitch = {
     "major_third": {"major_third": 0.7, "minor_third": 0.15, "perfect_fourth": 0.1, "none": 0.05},

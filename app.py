@@ -17,7 +17,7 @@ from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 import imageio
 
 # FFmpegのパスをエスケープして設定
-os.environ["FFMPEG_PATH"] = "/usr/bin/ffmpeg"
+os.environ["FFMPEG_PATH"] = "\\usr\\bin\\ffmpeg"
 
 
 # ボーカルと伴奏を抽出する関数

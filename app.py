@@ -17,7 +17,9 @@ from spleeter.audio.ffmpeg import FFMPEGProcessAudioAdapter
 import imageio
 
 # FFmpegのパスをエスケープして設定
-os.environ["IMAGEIO_FFMPEG_EXE"] = st.secrets["FFMPEG_PATH"]
+os.environ["PATH"] += (
+    os.pathsep + "C:\\Users\\kotaf\\ffmpeg\\ffmpeg-7.0.2-essentials_build\\bin"
+)
 
 
 # ボーカルと伴奏を抽出する関数
@@ -27,10 +29,8 @@ def extract_vocals_and_accompaniment(input_file, output_dir):
         os.makedirs(output_dir)
 
     separator = Separator("spleeter:2stems")
-    audio_adapter = FFMPEGProcessAudioAdapter()
-    separator.separate_to_file(
-        input_file, output_dir, codec="wav", audio_adapter=audio_adapter
-    )
+    separator.separate_to_file(input_file, output_dir, codec="wav")
+
     # ボーカルと伴奏のパスを返す
     vocal_file_path = os.path.join(output_dir, "uploaded_audio", "vocals.wav")
     accompaniment_file_path = os.path.join(
@@ -73,7 +73,7 @@ if uploaded_file is not None:
 
         else:
             st.error("ファイルが見つかりません。")
-
+            
 # 遷移確率行列
 transition_probabilities_same_pitch = {
     "major_third": {"major_third": 0.7, "minor_third": 0.15, "perfect_fourth": 0.1, "none": 0.05},

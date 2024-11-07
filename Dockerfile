@@ -26,5 +26,5 @@ EXPOSE 8080
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 
 # Streamlitアプリを実行するためのコマンド
-CMD ["streamlit", "run", "app.py", "--server.port", "$PORT"]
+CMD ["streamlit", "run", "app.py", "--server.port=8080", "$PORT"]
 

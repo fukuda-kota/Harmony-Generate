@@ -20,11 +20,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Streamlitのポートを設定
-EXPOSE 8501
+EXPOSE 8080
 
 # 環境変数としてFFmpegのパスを設定
 ENV FFMPEG_PATH=/usr/bin/ffmpeg
 
 # Streamlitアプリを実行するためのコマンド
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["streamlit", "run", "app.py", "--server.port", "$PORT"]
 
